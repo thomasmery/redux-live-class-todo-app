@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import addItem from '../../store/actions/add-item';
 import removeItem from '../../store/actions/remove-item';
+import toggleItem from '../../store/actions/toggle-item';
 import TodoItems from '../todo-items';
 
 export class TodoList extends React.Component {
@@ -22,6 +23,7 @@ export class TodoList extends React.Component {
     const {
       onAdd = e => e,
       onRemove = e => e,
+      onToggle = e => e,
       todos = [],
     } = this.props;
 
@@ -48,6 +50,7 @@ export class TodoList extends React.Component {
           <TodoItems
             items={todos}
             onRemove={onRemove}
+            onToggle={onToggle}
           />
           :
           <p>You have no todos.</p>
@@ -79,7 +82,8 @@ export const mapStateToProps = ({ todos }) => ({
 
 export const mapDispatchToProps = dispatch => ({
   onAdd: v => dispatch( addItem( v ) ),
-  onRemove: todo => dispatch( removeItem( todo ) )
+  onRemove: todo => dispatch( removeItem( todo ) ),
+  onToggle: index => dispatch( toggleItem (index) ),
 });
 
 export default connect( mapStateToProps, mapDispatchToProps )( TodoList );
