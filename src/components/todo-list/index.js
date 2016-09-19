@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import addItem from '../../store/actions/add-item';
 import removeItem from '../../store/actions/remove-item';
 import toggleItem from '../../store/actions/toggle-item';
+import { filterCompleteItems } from '../../store/actions/filter-items';
 import TodoItems from '../todo-items';
 
 export class TodoList extends React.Component {
@@ -25,6 +26,8 @@ export class TodoList extends React.Component {
       onRemove = e => e,
       onToggle = e => e,
       todos = [],
+      todos_filter_complete,
+      onFilterComplete = e => e,
     } = this.props;
 
     const {
@@ -45,10 +48,13 @@ export class TodoList extends React.Component {
           <button type="submit">Add</button>
         </form>
 
+        <div>FILTER COMPLETE ITEMS: <input type="checkbox" onClick={onFilterComplete} /></div>
+        
         { todos.length
           ?
           <TodoItems
             items={todos}
+            filters={{ complete: todos_filter_complete}}
             onRemove={onRemove}
             onToggle={onToggle}
           />
@@ -76,14 +82,16 @@ export class TodoList extends React.Component {
   }
 }
 
-export const mapStateToProps = ({ todos }) => ({
+export const mapStateToProps = ({ app, todos }) => ({
   todos,
+  todos_filter_complete: app.filters.todos.complete
 });
 
 export const mapDispatchToProps = dispatch => ({
   onAdd: v => dispatch( addItem( v ) ),
   onRemove: todo => dispatch( removeItem( todo ) ),
   onToggle: index => dispatch( toggleItem (index) ),
+  onFilterComplete: () => dispatch( filterCompleteItems () ),
 });
 
 export default connect( mapStateToProps, mapDispatchToProps )( TodoList );
