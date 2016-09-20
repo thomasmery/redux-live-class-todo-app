@@ -3,9 +3,13 @@ export default ( todos = [], { type, ...payload } ) => {
 
     case 'ADD_TODO_ITEM':
 
-      let _todo_item = Object.assign(payload, { complete: false });
+      let _todo_item = { 
+      	...payload,
+      	complete: false,
+      	mode: 'read',
+      };
 
-      return [ ...todos, payload ];
+      return [ ...todos, _todo_item ];
 
       break;
 
@@ -14,7 +18,7 @@ export default ( todos = [], { type, ...payload } ) => {
     	// extracting item from state
     	// and setting complete atttribute
     	// depending on previous complete status
-    	const { index } = payload;
+    	let { index } = payload;
     	_todo_item = Object.assign({}, todos[index], { complete: !todos[index].complete })
 
 		return [].concat(
@@ -25,10 +29,34 @@ export default ( todos = [], { type, ...payload } ) => {
 
     break;
 
+    case 'SWITCH_ITEM_MODE':
+
+      const { mode } = payload;
+
+      return [
+        ...todos.slice(0, payload.index),
+        {...todos[payload.index], mode },
+        ...todos.slice(payload.index+1, todos.length),
+      ];
+
+    break;
+
+    case 'UPDATE_ITEM':
+
+      const { name } = payload;
+
+      return [
+        ...todos.slice(0, payload.index),
+        { ...todos[payload.index], name, mode: 'read' },
+        ...todos.slice(payload.index+1, todos.length),
+      ];
+
+    break;
+
     case 'REMOVE_TODO_ITEM':
 
       return todos.filter( t => t !== payload.todo );
-      
+
     break;
 
   }

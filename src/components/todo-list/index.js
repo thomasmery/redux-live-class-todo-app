@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import addItem from '../../store/actions/add-item';
 import removeItem from '../../store/actions/remove-item';
 import toggleItem from '../../store/actions/toggle-item';
+import { switchItemMode, updateItem } from '../../store/actions/toggle-item';
 import { filterCompleteItems } from '../../store/actions/filter-items';
 import TodoItems from '../todo-items';
 
@@ -25,6 +26,8 @@ export class TodoList extends React.Component {
       onAdd = e => e,
       onRemove = e => e,
       onToggle = e => e,
+      onUpdate = e => e,
+      onModeSwitch = e => e,
       todos = [],
       todos_filter_complete,
       onFilterComplete = e => e,
@@ -57,6 +60,8 @@ export class TodoList extends React.Component {
             filters={{ complete: todos_filter_complete}}
             onRemove={onRemove}
             onToggle={onToggle}
+            onUpdate={onUpdate}
+            onModeSwitch={onModeSwitch}
           />
           :
           <p>You have no todos.</p>
@@ -91,6 +96,8 @@ export const mapDispatchToProps = dispatch => ({
   onAdd: v => dispatch( addItem( v ) ),
   onRemove: todo => dispatch( removeItem( todo ) ),
   onToggle: index => dispatch( toggleItem (index) ),
+  onUpdate: (index, name) => dispatch( updateItem (index, name) ),
+  onModeSwitch: (index, mode) => dispatch( switchItemMode (index, mode) ),
   onFilterComplete: () => dispatch( filterCompleteItems () ),
 });
 
